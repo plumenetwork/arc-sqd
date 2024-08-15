@@ -1,4 +1,5 @@
 type TokenCreation @entity {
+  createdAt: DateTime!
   owner: String! @index
   tokenAddress: String!
 }

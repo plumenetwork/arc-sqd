@@ -1,4 +1,4 @@
-import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, StringColumn as StringColumn_, Index as Index_} from "@subsquid/typeorm-store"
+import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, DateTimeColumn as DateTimeColumn_, StringColumn as StringColumn_, Index as Index_} from "@subsquid/typeorm-store"
 
 @Entity_()
 export class TokenCreation {
@@ -8,6 +8,9 @@ export class TokenCreation {
 
     @PrimaryColumn_()
     id!: string
+
+    @DateTimeColumn_({nullable: false})
+    createdAt!: Date
 
     @Index_()
     @StringColumn_({nullable: false})

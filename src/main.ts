@@ -11,6 +11,7 @@ processor.run(new TypeormDatabase({supportHotBlocks: true}), async (ctx) => {
       ctx.log.info(`Token created: owner=${owner}, tokenAddress=${tokenAddress}`)
       tokenCreations.push(new TokenCreation({
         id: log.id,
+        createdAt: new Date(log.block.timestamp),
         owner,
         tokenAddress
       }))
