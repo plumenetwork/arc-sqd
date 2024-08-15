@@ -13,7 +13,7 @@ deploy:
       - sqd
       - process:prod
     env:
-      RPC_ETH_HTTP: https://testnet-rpc.plumenetwork.xyz/http
+      RPC_ENDPOINT: https://testnet-rpc.plumenetwork.xyz/http
   api:
     cmd:
       - sqd

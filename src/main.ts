@@ -10,6 +10,7 @@ processor.run(new TypeormDatabase({supportHotBlocks: true}), async (ctx) => {
       let { owner, tokenAddress  } = fundTokenFactoryAbi.events.TokenCreated.decode(log);
       ctx.log.info(`Token created: owner=${owner}, tokenAddress=${tokenAddress}`)
       tokenCreations.push(new TokenCreation({
+        id: log.id,
         owner,
         tokenAddress
       }))
