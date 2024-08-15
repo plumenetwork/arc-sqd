@@ -1,29 +1,19 @@
 import {TypeormDatabase} from '@subsquid/typeorm-store'
-import {Burn} from './model'
 import {processor} from './processor'
+import * as fundTokenFactoryAbi from './abi/fundTokenFactory'
+import { TokenCreation } from './model';
 
 processor.run(new TypeormDatabase({supportHotBlocks: true}), async (ctx) => {
-    const burns: Burn[] = []
-    for (let c of ctx.blocks) {
-        for (let tx of c.transactions) {
-            // decode and normalize the tx data
-            burns.push(
-                new Burn({
-                    id: tx.id,
-                    block: c.header.height,
-                    address: tx.from,
-                    value: tx.value,
-                    txHash: tx.hash,
-                })
-            )
-        }
+  const tokenCreations: TokenCreation[] = []
+  for (let block of ctx.blocks) {
+    for (let log of block.logs) {
+      let { owner, tokenAddress  } = fundTokenFactoryAbi.events.TokenCreated.decode(log);
+      ctx.log.info(`Token created: owner=${owner}, tokenAddress=${tokenAddress}`)
+      tokenCreations.push(new TokenCreation({
+        owner,
+        tokenAddress
+      }))
     }
-    // apply vectorized transformations and aggregations
-    const burned = burns.reduce((acc, b) => acc + b.value, 0n) / 1_000_000_000n
-    const startBlock = ctx.blocks.at(0)?.header.height
-    const endBlock = ctx.blocks.at(-1)?.header.height
-    ctx.log.info(`Burned ${burned} Gwei from ${startBlock} to ${endBlock}`)
-
-    // upsert batches of entities with batch-optimized ctx.store.save
-    await ctx.store.upsert(burns)
+  }
+  await ctx.store.insert(tokenCreations)
 })

@@ -1,7 +1,7 @@
 manifestVersion: subsquid.io/v0.1
 name: arc-sqd
 version: 1
-description: 'The very first evm squid from manifest  '
+description: 'The sqd for Arc.'
 build: 
 deploy:
   addons:
@@ -12,6 +12,8 @@ deploy:
     cmd:
       - sqd
       - process:prod
+    env:
+      RPC_ETH_HTTP: https://testnet-rpc.plumenetwork.xyz/http
   api:
     cmd:
       - sqd

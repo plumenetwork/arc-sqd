@@ -1,1 +1,1 @@
-export * from "./burn.model"
+export * from "./tokenCreation.model"
