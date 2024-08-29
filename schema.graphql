@@ -1,5 +1,13 @@
 type TokenCreation @entity {
+  id: ID!
   createdAt: DateTime!
   owner: String! @index
   tokenAddress: String!
+}
+
+type TokenHolder @entity {
+  id: ID!
+  owner: String! @index
+  tokenAddress: String! @index
+  value: BigInt!
 }
