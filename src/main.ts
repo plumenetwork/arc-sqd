@@ -2,7 +2,7 @@ import {TypeormDatabase} from '@subsquid/typeorm-store'
 import { FACTORY_ADDRESS, processor } from './processor';
 import * as fundTokenFactoryAbi from './abi/fundTokenFactory'
 import * as fundTokenAbi from './abi/fundToken'
-import { TokenCreation, TokenHolder } from './model';
+import { TokenCreation, TokenDeposit, TokenHolder } from './model';
 import { Log } from '@subsquid/evm-processor';
 
 processor.run(new TypeormDatabase({supportHotBlocks: true}), async (ctx) => {
@@ -11,10 +11,11 @@ processor.run(new TypeormDatabase({supportHotBlocks: true}), async (ctx) => {
 
   const tokenCreations: TokenCreation[] = []
   const transferLogs: Log[] = [];
+  const depositedLogs: Log[] = [];
 
   for (let block of ctx.blocks) {
     for (let log of block.logs) {
-      if (log.topics[0] === fundTokenFactoryAbi.events.TokenCreated.topic) {
+      if (log.topics[0] === fundTokenFactoryAbi.events.TokenCreated.topic && log.address === FACTORY_ADDRESS) {
         let { owner, tokenAddress } = fundTokenFactoryAbi.events.TokenCreated.decode(log);
         ctx.log.info(`Token created: owner=${owner}, tokenAddress=${tokenAddress}`)
         tokenCreations.push(new TokenCreation({
@@ -28,6 +29,10 @@ processor.run(new TypeormDatabase({supportHotBlocks: true}), async (ctx) => {
 
       if (log.topics[0] === fundTokenAbi.events.Transfer.topic) {
         transferLogs.push(log)
+      }
+
+      if (log.topics[0] === fundTokenAbi.events.Deposited.topic) {
+        depositedLogs.push(log);
       }
     }
   }
@@ -60,6 +65,24 @@ processor.run(new TypeormDatabase({supportHotBlocks: true}), async (ctx) => {
         toTokenHolder.value = (toTokenHolder.value ?? 0n) + value;
         await ctx.store.upsert(toTokenHolder);
       }
+    }
+  }
+
+  for (let log of depositedLogs) {
+    if (tokenAddresses.has(log.address)) {
+      let { amount, depositor } = fundTokenAbi.events.Deposited.decode(log);
+      const transactionHash = log.block.hash;
+      const depositedAt = new Date(log.block.timestamp);
+      ctx.log.info(`Deposited: address=${log.address}, depositor=${depositor}, amount=${amount}, transactionHash=${transactionHash}, depositedAt=${depositedAt}`)
+      const tokenDeposit = new TokenDeposit({
+        id: log.id,
+        depositedAt,
+        tokenAddress: log.address,
+        depositor,
+        amount,
+        transactionHash,
+      });
+      await ctx.store.insert(tokenDeposit);
     }
   }
 })

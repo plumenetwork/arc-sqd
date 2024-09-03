@@ -11,3 +11,12 @@ type TokenHolder @entity {
   tokenAddress: String! @index
   value: BigInt!
 }
+
+type TokenDeposit @entity {
+  id: ID!
+  depositedAt: DateTime!
+  tokenAddress: String! @index
+  depositor: String!
+  amount: BigInt!
+  transactionHash: String!
+}

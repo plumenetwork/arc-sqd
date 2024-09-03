@@ -834,19 +834,6 @@
   },
   {
     "inputs": [],
-    "name": "factory",
-    "outputs": [
-      {
-        "internalType": "contract AssetFactory",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
     "name": "getAdmin",
     "outputs": [
       {
@@ -879,6 +866,19 @@
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getPurchaseToken",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -1210,6 +1210,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "purchaseToken",
+    "outputs": [
+      {
+        "internalType": "contract goonUSD",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -1254,6 +1267,19 @@
       }
     ],
     "name": "revokeRole",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_purchaseToken",
+        "type": "address"
+      }
+    ],
+    "name": "setPurchaseToken",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

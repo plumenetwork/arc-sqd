@@ -41,10 +41,10 @@ export const functions = {
     deposit: fun("0xb6b55f25", "deposit(uint256)", {"amount": p.uint256}, ),
     eip712Domain: viewFun("0x84b0196e", "eip712Domain()", {}, {"fields": p.bytes1, "name": p.string, "version": p.string, "chainId": p.uint256, "verifyingContract": p.address, "salt": p.bytes32, "extensions": p.array(p.uint256)}),
     enableWhitelist: fun("0xcdfb2b4e", "enableWhitelist()", {}, ),
-    factory: viewFun("0xc45a0155", "factory()", {}, p.address),
     getAdmin: viewFun("0x6e9960c3", "getAdmin()", {}, p.address),
     getImageUrl: viewFun("0x9743a691", "getImageUrl()", {}, p.string),
     getPricePerToken: viewFun("0xca1e9738", "getPricePerToken()", {}, p.uint256),
+    getPurchaseToken: viewFun("0x0a1e0c22", "getPurchaseToken()", {}, p.address),
     getRoleAdmin: viewFun("0x248a9ca3", "getRoleAdmin(bytes32)", {"role": p.bytes32}, p.bytes32),
     getTermsAndConditions: viewFun("0x43beb938", "getTermsAndConditions(address)", {"_address": p.address}, p.bool),
     getTermsAndConditionsUrl: viewFun("0xd244132f", "getTermsAndConditionsUrl()", {}, p.string),
@@ -62,9 +62,11 @@ export const functions = {
     paused: viewFun("0x5c975abb", "paused()", {}, p.bool),
     permit: fun("0xd505accf", "permit(address,address,uint256,uint256,uint8,bytes32,bytes32)", {"owner": p.address, "spender": p.address, "value": p.uint256, "deadline": p.uint256, "v": p.uint8, "r": p.bytes32, "s": p.bytes32}, ),
     proxiableUUID: viewFun("0x52d1902d", "proxiableUUID()", {}, p.bytes32),
+    purchaseToken: viewFun("0xa95c4d62", "purchaseToken()", {}, p.address),
     removeFromWhitelist: fun("0x8ab1d681", "removeFromWhitelist(address)", {"account": p.address}, ),
     renounceRole: fun("0x36568abe", "renounceRole(bytes32,address)", {"role": p.bytes32, "callerConfirmation": p.address}, ),
     revokeRole: fun("0xd547741f", "revokeRole(bytes32,address)", {"role": p.bytes32, "account": p.address}, ),
+    setPurchaseToken: fun("0x8456bd2e", "setPurchaseToken(address)", {"_purchaseToken": p.address}, ),
     setTermsAndConditionsUrl: fun("0x4f436cca", "setTermsAndConditionsUrl(string)", {"_url": p.string}, ),
     signTermsAndConditions: fun("0x0fdcc5cc", "signTermsAndConditions()", {}, ),
     supportsInterface: viewFun("0x01ffc9a7", "supportsInterface(bytes4)", {"interfaceId": p.bytes4}, p.bool),
@@ -142,10 +144,6 @@ export class Contract extends ContractBase {
         return this.eth_call(functions.eip712Domain, {})
     }
 
-    factory() {
-        return this.eth_call(functions.factory, {})
-    }
-
     getAdmin() {
         return this.eth_call(functions.getAdmin, {})
     }
@@ -156,6 +154,10 @@ export class Contract extends ContractBase {
 
     getPricePerToken() {
         return this.eth_call(functions.getPricePerToken, {})
+    }
+
+    getPurchaseToken() {
+        return this.eth_call(functions.getPurchaseToken, {})
     }
 
     getRoleAdmin(role: GetRoleAdminParams["role"]) {
@@ -204,6 +206,10 @@ export class Contract extends ContractBase {
 
     proxiableUUID() {
         return this.eth_call(functions.proxiableUUID, {})
+    }
+
+    purchaseToken() {
+        return this.eth_call(functions.purchaseToken, {})
     }
 
     supportsInterface(interfaceId: SupportsInterfaceParams["interfaceId"]) {
@@ -331,9 +337,6 @@ export type Eip712DomainReturn = FunctionReturn<typeof functions.eip712Domain>
 export type EnableWhitelistParams = FunctionArguments<typeof functions.enableWhitelist>
 export type EnableWhitelistReturn = FunctionReturn<typeof functions.enableWhitelist>
 
-export type FactoryParams = FunctionArguments<typeof functions.factory>
-export type FactoryReturn = FunctionReturn<typeof functions.factory>
-
 export type GetAdminParams = FunctionArguments<typeof functions.getAdmin>
 export type GetAdminReturn = FunctionReturn<typeof functions.getAdmin>
 
@@ -342,6 +345,9 @@ export type GetImageUrlReturn = FunctionReturn<typeof functions.getImageUrl>
 
 export type GetPricePerTokenParams = FunctionArguments<typeof functions.getPricePerToken>
 export type GetPricePerTokenReturn = FunctionReturn<typeof functions.getPricePerToken>
+
+export type GetPurchaseTokenParams = FunctionArguments<typeof functions.getPurchaseToken>
+export type GetPurchaseTokenReturn = FunctionReturn<typeof functions.getPurchaseToken>
 
 export type GetRoleAdminParams = FunctionArguments<typeof functions.getRoleAdmin>
 export type GetRoleAdminReturn = FunctionReturn<typeof functions.getRoleAdmin>
@@ -394,6 +400,9 @@ export type PermitReturn = FunctionReturn<typeof functions.permit>
 export type ProxiableUUIDParams = FunctionArguments<typeof functions.proxiableUUID>
 export type ProxiableUUIDReturn = FunctionReturn<typeof functions.proxiableUUID>
 
+export type PurchaseTokenParams = FunctionArguments<typeof functions.purchaseToken>
+export type PurchaseTokenReturn = FunctionReturn<typeof functions.purchaseToken>
+
 export type RemoveFromWhitelistParams = FunctionArguments<typeof functions.removeFromWhitelist>
 export type RemoveFromWhitelistReturn = FunctionReturn<typeof functions.removeFromWhitelist>
 
@@ -402,6 +411,9 @@ export type RenounceRoleReturn = FunctionReturn<typeof functions.renounceRole>
 
 export type RevokeRoleParams = FunctionArguments<typeof functions.revokeRole>
 export type RevokeRoleReturn = FunctionReturn<typeof functions.revokeRole>
+
+export type SetPurchaseTokenParams = FunctionArguments<typeof functions.setPurchaseToken>
+export type SetPurchaseTokenReturn = FunctionReturn<typeof functions.setPurchaseToken>
 
 export type SetTermsAndConditionsUrlParams = FunctionArguments<typeof functions.setTermsAndConditionsUrl>
 export type SetTermsAndConditionsUrlReturn = FunctionReturn<typeof functions.setTermsAndConditionsUrl>
