@@ -3,7 +3,7 @@ import { EvmBatchProcessor } from '@subsquid/evm-processor'
 import * as fundTokenFactoryAbi from './abi/fundTokenFactory'
 import * as fundTokenAbi from './abi/fundToken'
 
-export const FACTORY_ADDRESS = '0xa2D4b99980784a00D94d59bADBA22f7Ce3515426';
+export const FACTORY_ADDRESS = '0xA5751b72D641471Aa35176A3E3193E8996eC425F';
 
 export const processor = new EvmBatchProcessor()
   .setGateway('https://v2.archive.subsquid.io/network/plume-testnet')
@@ -13,7 +13,7 @@ export const processor = new EvmBatchProcessor()
   })
   .setFinalityConfirmation(75)
   .setBlockRange({
-    from: 8000948
+    from: 11626110
   })
   .addLog({
       address: [ FACTORY_ADDRESS ],
