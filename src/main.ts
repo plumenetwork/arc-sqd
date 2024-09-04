@@ -15,7 +15,7 @@ processor.run(new TypeormDatabase({supportHotBlocks: true}), async (ctx) => {
 
   for (let block of ctx.blocks) {
     for (let log of block.logs) {
-      if (log.topics[0] === fundTokenFactoryAbi.events.TokenCreated.topic && log.address === FACTORY_ADDRESS) {
+      if (log.topics[0] === fundTokenFactoryAbi.events.TokenCreated.topic && log.address.toLowerCase() === FACTORY_ADDRESS.toLowerCase()) {
         let { owner, tokenAddress } = fundTokenFactoryAbi.events.TokenCreated.decode(log);
         ctx.log.info(`Token created: owner=${owner}, tokenAddress=${tokenAddress}`)
         tokenCreations.push(new TokenCreation({
