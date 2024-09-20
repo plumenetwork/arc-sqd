@@ -30,30 +30,31 @@ export const functions = {
     addToWhitelist: fun("0xe43252d7", "addToWhitelist(address)", {"account": p.address}, ),
     allowance: viewFun("0xdd62ed3e", "allowance(address,address)", {"owner": p.address, "spender": p.address}, p.uint256),
     approve: fun("0x095ea7b3", "approve(address,uint256)", {"spender": p.address, "value": p.uint256}, p.bool),
+    assetFactory: viewFun("0xc3acb4d1", "assetFactory()", {}, p.address),
     balanceOf: viewFun("0x70a08231", "balanceOf(address)", {"account": p.address}, p.uint256),
     burn: fun("0x42966c68", "burn(uint256)", {"value": p.uint256}, ),
     burnFrom: fun("0x79cc6790", "burnFrom(address,uint256)", {"account": p.address, "value": p.uint256}, ),
-    claimYield: fun("0x406cf229", "claimYield()", {}, p.uint256),
+    claimYield: fun("0x406cf229", "claimYield()", {}, {"currency": p.address, "amount": p.uint256}),
     'claimedYield(address)': viewFun("0x91cfdb7f", "claimedYield(address)", {"user": p.address}, p.uint256),
     'claimedYield()': viewFun("0xb41af99a", "claimedYield()", {}, p.uint256),
     contractType: viewFun("0xcb2ef6f7", "contractType()", {}, p.string),
     decimals: viewFun("0x313ce567", "decimals()", {}, p.uint8),
-    deposit: fun("0xb6b55f25", "deposit(uint256)", {"amount": p.uint256}, ),
+    depositYield: fun("0x15816bac", "depositYield(uint256,uint256)", {"timestamp": p.uint256, "amount": p.uint256}, ),
     eip712Domain: viewFun("0x84b0196e", "eip712Domain()", {}, {"fields": p.bytes1, "name": p.string, "version": p.string, "chainId": p.uint256, "verifyingContract": p.address, "salt": p.bytes32, "extensions": p.array(p.uint256)}),
     enableWhitelist: fun("0xcdfb2b4e", "enableWhitelist()", {}, ),
     getAdmin: viewFun("0x6e9960c3", "getAdmin()", {}, p.address),
     getImageUrl: viewFun("0x9743a691", "getImageUrl()", {}, p.string),
     getPricePerToken: viewFun("0xca1e9738", "getPricePerToken()", {}, p.uint256),
-    getPurchaseToken: viewFun("0x0a1e0c22", "getPurchaseToken()", {}, p.address),
     getRoleAdmin: viewFun("0x248a9ca3", "getRoleAdmin(bytes32)", {"role": p.bytes32}, p.bytes32),
     getTermsAndConditions: viewFun("0x43beb938", "getTermsAndConditions(address)", {"_address": p.address}, p.bool),
     getTermsAndConditionsUrl: viewFun("0xd244132f", "getTermsAndConditionsUrl()", {}, p.string),
     getTotalSupplyValue: viewFun("0x814e0ea3", "getTotalSupplyValue()", {}, p.uint256),
     getVersion: viewFun("0x0d8e6e2c", "getVersion()", {}, p.string),
     getWhitelistAddresses: viewFun("0x578cbd1f", "getWhitelistAddresses()", {}, p.array(p.address)),
+    getYieldCurrencyAddress: viewFun("0xb65dd51b", "getYieldCurrencyAddress()", {}, p.address),
     grantRole: fun("0x2f2ff15d", "grantRole(bytes32,address)", {"role": p.bytes32, "account": p.address}, ),
     hasRole: viewFun("0x91d14854", "hasRole(bytes32,address)", {"role": p.bytes32, "account": p.address}, p.bool),
-    initialize: fun("0x08090997", "initialize(string,string,string,uint8,uint256,uint256,address,address)", {"name": p.string, "symbol": p.string, "_imageUrl": p.string, "customDecimals": p.uint8, "initialSupply": p.uint256, "_totalSupplyValue": p.uint256, "assetFactory": p.address, "defaultAdmin": p.address}, ),
+    initialize: fun("0x08090997", "initialize(string,string,string,uint8,uint256,uint256,address,address)", {"name": p.string, "symbol": p.string, "_imageUrl": p.string, "customDecimals": p.uint8, "initialSupply": p.uint256, "_totalSupplyValue": p.uint256, "yieldCurrency": p.address, "defaultAdmin": p.address}, ),
     isAddressWhitelisted: viewFun("0x13f44d10", "isAddressWhitelisted(address)", {"account": p.address}, p.bool),
     mint: fun("0x40c10f19", "mint(address,uint256)", {"to": p.address, "amount": p.uint256}, ),
     name: viewFun("0x06fdde03", "name()", {}, p.string),
@@ -61,12 +62,11 @@ export const functions = {
     pause: fun("0x8456cb59", "pause()", {}, ),
     paused: viewFun("0x5c975abb", "paused()", {}, p.bool),
     permit: fun("0xd505accf", "permit(address,address,uint256,uint256,uint8,bytes32,bytes32)", {"owner": p.address, "spender": p.address, "value": p.uint256, "deadline": p.uint256, "v": p.uint8, "r": p.bytes32, "s": p.bytes32}, ),
+    processYield: fun("0x82d70d52", "processYield(address)", {"tokenHolder": p.address}, ),
     proxiableUUID: viewFun("0x52d1902d", "proxiableUUID()", {}, p.bytes32),
-    purchaseToken: viewFun("0xa95c4d62", "purchaseToken()", {}, p.address),
     removeFromWhitelist: fun("0x8ab1d681", "removeFromWhitelist(address)", {"account": p.address}, ),
     renounceRole: fun("0x36568abe", "renounceRole(bytes32,address)", {"role": p.bytes32, "callerConfirmation": p.address}, ),
     revokeRole: fun("0xd547741f", "revokeRole(bytes32,address)", {"role": p.bytes32, "account": p.address}, ),
-    setPurchaseToken: fun("0x8456bd2e", "setPurchaseToken(address)", {"_purchaseToken": p.address}, ),
     setTermsAndConditionsUrl: fun("0x4f436cca", "setTermsAndConditionsUrl(string)", {"_url": p.string}, ),
     signTermsAndConditions: fun("0x0fdcc5cc", "signTermsAndConditions()", {}, ),
     supportsInterface: viewFun("0x01ffc9a7", "supportsInterface(bytes4)", {"interfaceId": p.bytes4}, p.bool),
@@ -76,8 +76,8 @@ export const functions = {
     totalSupply: viewFun("0x18160ddd", "totalSupply()", {}, p.uint256),
     totalSupplyValue: viewFun("0x56fcc0c6", "totalSupplyValue()", {}, p.uint256),
     totalYield: viewFun("0x01418205", "totalYield()", {}, p.uint256),
-    transfer: fun("0xa9059cbb", "transfer(address,uint256)", {"recipient": p.address, "amount": p.uint256}, p.bool),
-    transferFrom: fun("0x23b872dd", "transferFrom(address,address,uint256)", {"sender": p.address, "recipient": p.address, "amount": p.uint256}, p.bool),
+    transfer: fun("0xa9059cbb", "transfer(address,uint256)", {"to": p.address, "value": p.uint256}, p.bool),
+    transferFrom: fun("0x23b872dd", "transferFrom(address,address,uint256)", {"from": p.address, "to": p.address, "value": p.uint256}, p.bool),
     'unclaimedYield()': viewFun("0x1c105d63", "unclaimedYield()", {}, p.uint256),
     'unclaimedYield(address)': viewFun("0xc28bb0cf", "unclaimedYield(address)", {"user": p.address}, p.uint256),
     unpause: fun("0x3f4ba83a", "unpause()", {}, ),
@@ -120,6 +120,10 @@ export class Contract extends ContractBase {
         return this.eth_call(functions.allowance, {owner, spender})
     }
 
+    assetFactory() {
+        return this.eth_call(functions.assetFactory, {})
+    }
+
     balanceOf(account: BalanceOfParams["account"]) {
         return this.eth_call(functions.balanceOf, {account})
     }
@@ -156,10 +160,6 @@ export class Contract extends ContractBase {
         return this.eth_call(functions.getPricePerToken, {})
     }
 
-    getPurchaseToken() {
-        return this.eth_call(functions.getPurchaseToken, {})
-    }
-
     getRoleAdmin(role: GetRoleAdminParams["role"]) {
         return this.eth_call(functions.getRoleAdmin, {role})
     }
@@ -184,6 +184,10 @@ export class Contract extends ContractBase {
         return this.eth_call(functions.getWhitelistAddresses, {})
     }
 
+    getYieldCurrencyAddress() {
+        return this.eth_call(functions.getYieldCurrencyAddress, {})
+    }
+
     hasRole(role: HasRoleParams["role"], account: HasRoleParams["account"]) {
         return this.eth_call(functions.hasRole, {role, account})
     }
@@ -206,10 +210,6 @@ export class Contract extends ContractBase {
 
     proxiableUUID() {
         return this.eth_call(functions.proxiableUUID, {})
-    }
-
-    purchaseToken() {
-        return this.eth_call(functions.purchaseToken, {})
     }
 
     supportsInterface(interfaceId: SupportsInterfaceParams["interfaceId"]) {
@@ -304,6 +304,9 @@ export type AllowanceReturn = FunctionReturn<typeof functions.allowance>
 export type ApproveParams = FunctionArguments<typeof functions.approve>
 export type ApproveReturn = FunctionReturn<typeof functions.approve>
 
+export type AssetFactoryParams = FunctionArguments<typeof functions.assetFactory>
+export type AssetFactoryReturn = FunctionReturn<typeof functions.assetFactory>
+
 export type BalanceOfParams = FunctionArguments<typeof functions.balanceOf>
 export type BalanceOfReturn = FunctionReturn<typeof functions.balanceOf>
 
@@ -328,8 +331,8 @@ export type ContractTypeReturn = FunctionReturn<typeof functions.contractType>
 export type DecimalsParams = FunctionArguments<typeof functions.decimals>
 export type DecimalsReturn = FunctionReturn<typeof functions.decimals>
 
-export type DepositParams = FunctionArguments<typeof functions.deposit>
-export type DepositReturn = FunctionReturn<typeof functions.deposit>
+export type DepositYieldParams = FunctionArguments<typeof functions.depositYield>
+export type DepositYieldReturn = FunctionReturn<typeof functions.depositYield>
 
 export type Eip712DomainParams = FunctionArguments<typeof functions.eip712Domain>
 export type Eip712DomainReturn = FunctionReturn<typeof functions.eip712Domain>
@@ -345,9 +348,6 @@ export type GetImageUrlReturn = FunctionReturn<typeof functions.getImageUrl>
 
 export type GetPricePerTokenParams = FunctionArguments<typeof functions.getPricePerToken>
 export type GetPricePerTokenReturn = FunctionReturn<typeof functions.getPricePerToken>
-
-export type GetPurchaseTokenParams = FunctionArguments<typeof functions.getPurchaseToken>
-export type GetPurchaseTokenReturn = FunctionReturn<typeof functions.getPurchaseToken>
 
 export type GetRoleAdminParams = FunctionArguments<typeof functions.getRoleAdmin>
 export type GetRoleAdminReturn = FunctionReturn<typeof functions.getRoleAdmin>
@@ -366,6 +366,9 @@ export type GetVersionReturn = FunctionReturn<typeof functions.getVersion>
 
 export type GetWhitelistAddressesParams = FunctionArguments<typeof functions.getWhitelistAddresses>
 export type GetWhitelistAddressesReturn = FunctionReturn<typeof functions.getWhitelistAddresses>
+
+export type GetYieldCurrencyAddressParams = FunctionArguments<typeof functions.getYieldCurrencyAddress>
+export type GetYieldCurrencyAddressReturn = FunctionReturn<typeof functions.getYieldCurrencyAddress>
 
 export type GrantRoleParams = FunctionArguments<typeof functions.grantRole>
 export type GrantRoleReturn = FunctionReturn<typeof functions.grantRole>
@@ -397,11 +400,11 @@ export type PausedReturn = FunctionReturn<typeof functions.paused>
 export type PermitParams = FunctionArguments<typeof functions.permit>
 export type PermitReturn = FunctionReturn<typeof functions.permit>
 
+export type ProcessYieldParams = FunctionArguments<typeof functions.processYield>
+export type ProcessYieldReturn = FunctionReturn<typeof functions.processYield>
+
 export type ProxiableUUIDParams = FunctionArguments<typeof functions.proxiableUUID>
 export type ProxiableUUIDReturn = FunctionReturn<typeof functions.proxiableUUID>
-
-export type PurchaseTokenParams = FunctionArguments<typeof functions.purchaseToken>
-export type PurchaseTokenReturn = FunctionReturn<typeof functions.purchaseToken>
 
 export type RemoveFromWhitelistParams = FunctionArguments<typeof functions.removeFromWhitelist>
 export type RemoveFromWhitelistReturn = FunctionReturn<typeof functions.removeFromWhitelist>
@@ -411,9 +414,6 @@ export type RenounceRoleReturn = FunctionReturn<typeof functions.renounceRole>
 
 export type RevokeRoleParams = FunctionArguments<typeof functions.revokeRole>
 export type RevokeRoleReturn = FunctionReturn<typeof functions.revokeRole>
-
-export type SetPurchaseTokenParams = FunctionArguments<typeof functions.setPurchaseToken>
-export type SetPurchaseTokenReturn = FunctionReturn<typeof functions.setPurchaseToken>
 
 export type SetTermsAndConditionsUrlParams = FunctionArguments<typeof functions.setTermsAndConditionsUrl>
 export type SetTermsAndConditionsUrlReturn = FunctionReturn<typeof functions.setTermsAndConditionsUrl>

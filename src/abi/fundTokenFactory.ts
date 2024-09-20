@@ -14,9 +14,7 @@ export const events = {
 export const functions = {
     DEFAULT_ADMIN_ROLE: viewFun("0xa217fddf", "DEFAULT_ADMIN_ROLE()", {}, p.bytes32),
     UPGRADE_INTERFACE_VERSION: viewFun("0xad3cb1cc", "UPGRADE_INTERFACE_VERSION()", {}, p.string),
-    addRWACategory: fun("0x08cf7f45", "addRWACategory(uint256,string)", {"id": p.uint256, "name": p.string}, ),
-    createToken: fun("0x591fa911", "createToken(string,string,string,uint8,uint256,uint256,address)", {"name": p.string, "symbol": p.string, "imageUrl": p.string, "decimals": p.uint8, "initialSupply": p.uint256, "totalSupplyValue": p.uint256, "defaultAdmin": p.address}, p.address),
-    getRWACategory: viewFun("0x3c21eb64", "getRWACategory(uint256)", {"id": p.uint256}, {"name": p.string, "count": p.uint256}),
+    createToken: fun("0x2663fff0", "createToken(string,string,string,uint8,uint256,uint256,address,address)", {"name": p.string, "symbol": p.string, "imageUrl": p.string, "decimals": p.uint8, "initialSupply": p.uint256, "totalSupplyValue": p.uint256, "yieldCurrency": p.address, "defaultAdmin": p.address}, p.address),
     getRoleAdmin: viewFun("0x248a9ca3", "getRoleAdmin(bytes32)", {"role": p.bytes32}, p.bytes32),
     grantRole: fun("0x2f2ff15d", "grantRole(bytes32,address)", {"role": p.bytes32, "account": p.address}, ),
     hasRole: viewFun("0x91d14854", "hasRole(bytes32,address)", {"role": p.bytes32, "account": p.address}, p.bool),
@@ -39,10 +37,6 @@ export class Contract extends ContractBase {
 
     UPGRADE_INTERFACE_VERSION() {
         return this.eth_call(functions.UPGRADE_INTERFACE_VERSION, {})
-    }
-
-    getRWACategory(id: GetRWACategoryParams["id"]) {
-        return this.eth_call(functions.getRWACategory, {id})
     }
 
     getRoleAdmin(role: GetRoleAdminParams["role"]) {
@@ -81,14 +75,8 @@ export type DEFAULT_ADMIN_ROLEReturn = FunctionReturn<typeof functions.DEFAULT_A
 export type UPGRADE_INTERFACE_VERSIONParams = FunctionArguments<typeof functions.UPGRADE_INTERFACE_VERSION>
 export type UPGRADE_INTERFACE_VERSIONReturn = FunctionReturn<typeof functions.UPGRADE_INTERFACE_VERSION>
 
-export type AddRWACategoryParams = FunctionArguments<typeof functions.addRWACategory>
-export type AddRWACategoryReturn = FunctionReturn<typeof functions.addRWACategory>
-
 export type CreateTokenParams = FunctionArguments<typeof functions.createToken>
 export type CreateTokenReturn = FunctionReturn<typeof functions.createToken>
-
-export type GetRWACategoryParams = FunctionArguments<typeof functions.getRWACategory>
-export type GetRWACategoryReturn = FunctionReturn<typeof functions.getRWACategory>
 
 export type GetRoleAdminParams = FunctionArguments<typeof functions.getRoleAdmin>
 export type GetRoleAdminReturn = FunctionReturn<typeof functions.getRoleAdmin>
