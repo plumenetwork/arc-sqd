@@ -3,7 +3,7 @@ import { EvmBatchProcessor } from '@subsquid/evm-processor'
 import * as fundTokenFactoryAbi from './abi/fundTokenFactory'
 import * as fundTokenAbi from './abi/fundToken'
 
-export const FACTORY_ADDRESS = '0x8d70Ab12Ad8715995FA5f1392941131f405757C8';
+export const FACTORY_ADDRESS = '0xfF5D81646171Ef951E200797981792c5f49D0f28';
 
 export const processor = new EvmBatchProcessor()
   .setRpcEndpoint({
