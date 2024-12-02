@@ -12,6 +12,7 @@ processor.run(new TypeormDatabase({supportHotBlocks: true}), async (ctx) => {
   const tokenCreations: TokenCreation[] = []
   const transferLogs: Log[] = [];
   const depositedLogs: Log[] = [];
+  const yieldClaimedLogs: Log[] = [];
 
   for (let block of ctx.blocks) {
     for (let log of block.logs) {
@@ -33,6 +34,10 @@ processor.run(new TypeormDatabase({supportHotBlocks: true}), async (ctx) => {
 
       if (log.topics[0] === fundTokenAbi.events.Deposited.topic) {
         depositedLogs.push(log);
+      }
+
+      if (log.topics[0] === fundTokenAbi.events.YieldClaimed.topic) {
+        yieldClaimedLogs.push(log);
       }
     }
   }
@@ -83,6 +88,16 @@ processor.run(new TypeormDatabase({supportHotBlocks: true}), async (ctx) => {
         transactionHash,
       });
       await ctx.store.insert(tokenDeposit);
+    }
+  }
+
+  for (let log of yieldClaimedLogs) {
+    if (tokenAddresses.has(log.address)) {
+      let { amount, claimer } = fundTokenAbi.events.YieldClaimed.decode(log);
+      const transactionHash = log.block.hash;
+      const claimedAt = new Date(log.block.timestamp);
+      ctx.log.info(`Yield claimed: address=${log.address}, claimer=${claimer}, amount=${amount}, transactionHash=${transactionHash}, claimedAt=${claimedAt}`)
+      // TODO: Add a new model for yield claims
     }
   }
 })

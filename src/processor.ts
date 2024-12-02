@@ -3,7 +3,7 @@ import { EvmBatchProcessor } from '@subsquid/evm-processor'
 import * as fundTokenFactoryAbi from './abi/fundTokenFactory'
 import * as fundTokenAbi from './abi/fundToken'
 
-export const FACTORY_ADDRESS = '0x935F78637f48A612cB30C19A7732a5B6DE40Feb1';
+export const FACTORY_ADDRESS = '0x8d70Ab12Ad8715995FA5f1392941131f405757C8';
 
 export const processor = new EvmBatchProcessor()
   .setRpcEndpoint({
@@ -12,12 +12,16 @@ export const processor = new EvmBatchProcessor()
   })
   .setFinalityConfirmation(75)
   .setBlockRange({
-    from: 50
+    from: 5499549
   })
   .addLog({
       address: [ FACTORY_ADDRESS ],
       topic0: [ fundTokenFactoryAbi.events.TokenCreated.topic ]
   })
   .addLog({
-    topic0: [ fundTokenAbi.events.Transfer.topic, fundTokenAbi.events.Deposited.topic ]
+    topic0: [
+      fundTokenAbi.events.Transfer.topic,
+      fundTokenAbi.events.Deposited.topic,
+      fundTokenAbi.events.YieldClaimed.topic
+    ]
   })
