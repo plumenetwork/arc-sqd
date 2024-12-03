@@ -15,15 +15,18 @@ export const functions = {
     DEFAULT_ADMIN_ROLE: viewFun("0xa217fddf", "DEFAULT_ADMIN_ROLE()", {}, p.bytes32),
     UPGRADE_INTERFACE_VERSION: viewFun("0xad3cb1cc", "UPGRADE_INTERFACE_VERSION()", {}, p.string),
     createToken: fun("0x2663fff0", "createToken(string,string,string,uint8,uint256,uint256,address,address)", {"name": p.string, "symbol": p.string, "imageUrl": p.string, "decimals": p.uint8, "initialSupply": p.uint256, "totalSupplyValue": p.uint256, "yieldCurrency": p.address, "defaultAdmin": p.address}, p.address),
+    getInitialImplementation: viewFun("0x0c4c9c49", "getInitialImplementation()", {}, p.address),
     getRoleAdmin: viewFun("0x248a9ca3", "getRoleAdmin(bytes32)", {"role": p.bytes32}, p.bytes32),
     grantRole: fun("0x2f2ff15d", "grantRole(bytes32,address)", {"role": p.bytes32, "account": p.address}, ),
     hasRole: viewFun("0x91d14854", "hasRole(bytes32,address)", {"role": p.bytes32, "account": p.address}, p.bool),
+    initalImplementation: viewFun("0x447af782", "initalImplementation()", {}, p.address),
     initialize: fun("0xc4d66de8", "initialize(address)", {"_initialImplementation": p.address}, ),
     isImplementationWhitelisted: viewFun("0x8876c2eb", "isImplementationWhitelisted(address)", {"implementation": p.address}, p.bool),
     proxiableUUID: viewFun("0x52d1902d", "proxiableUUID()", {}, p.bytes32),
     removeWhiteListedImplementation: fun("0x4f73c629", "removeWhiteListedImplementation(address)", {"implementation": p.address}, ),
     renounceRole: fun("0x36568abe", "renounceRole(bytes32,address)", {"role": p.bytes32, "callerConfirmation": p.address}, ),
     revokeRole: fun("0xd547741f", "revokeRole(bytes32,address)", {"role": p.bytes32, "account": p.address}, ),
+    setImplementation: fun("0xd784d426", "setImplementation(address)", {"newImplementation": p.address}, ),
     supportsInterface: viewFun("0x01ffc9a7", "supportsInterface(bytes4)", {"interfaceId": p.bytes4}, p.bool),
     upgradeToAndCall: fun("0x4f1ef286", "upgradeToAndCall(address,bytes)", {"newImplementation": p.address, "data": p.bytes}, ),
     whitelistImplementation: fun("0x524291df", "whitelistImplementation(address)", {"newImplementation": p.address}, ),
@@ -39,12 +42,20 @@ export class Contract extends ContractBase {
         return this.eth_call(functions.UPGRADE_INTERFACE_VERSION, {})
     }
 
+    getInitialImplementation() {
+        return this.eth_call(functions.getInitialImplementation, {})
+    }
+
     getRoleAdmin(role: GetRoleAdminParams["role"]) {
         return this.eth_call(functions.getRoleAdmin, {role})
     }
 
     hasRole(role: HasRoleParams["role"], account: HasRoleParams["account"]) {
         return this.eth_call(functions.hasRole, {role, account})
+    }
+
+    initalImplementation() {
+        return this.eth_call(functions.initalImplementation, {})
     }
 
     isImplementationWhitelisted(implementation: IsImplementationWhitelistedParams["implementation"]) {
@@ -78,6 +89,9 @@ export type UPGRADE_INTERFACE_VERSIONReturn = FunctionReturn<typeof functions.UP
 export type CreateTokenParams = FunctionArguments<typeof functions.createToken>
 export type CreateTokenReturn = FunctionReturn<typeof functions.createToken>
 
+export type GetInitialImplementationParams = FunctionArguments<typeof functions.getInitialImplementation>
+export type GetInitialImplementationReturn = FunctionReturn<typeof functions.getInitialImplementation>
+
 export type GetRoleAdminParams = FunctionArguments<typeof functions.getRoleAdmin>
 export type GetRoleAdminReturn = FunctionReturn<typeof functions.getRoleAdmin>
 
@@ -86,6 +100,9 @@ export type GrantRoleReturn = FunctionReturn<typeof functions.grantRole>
 
 export type HasRoleParams = FunctionArguments<typeof functions.hasRole>
 export type HasRoleReturn = FunctionReturn<typeof functions.hasRole>
+
+export type InitalImplementationParams = FunctionArguments<typeof functions.initalImplementation>
+export type InitalImplementationReturn = FunctionReturn<typeof functions.initalImplementation>
 
 export type InitializeParams = FunctionArguments<typeof functions.initialize>
 export type InitializeReturn = FunctionReturn<typeof functions.initialize>
@@ -104,6 +121,9 @@ export type RenounceRoleReturn = FunctionReturn<typeof functions.renounceRole>
 
 export type RevokeRoleParams = FunctionArguments<typeof functions.revokeRole>
 export type RevokeRoleReturn = FunctionReturn<typeof functions.revokeRole>
+
+export type SetImplementationParams = FunctionArguments<typeof functions.setImplementation>
+export type SetImplementationReturn = FunctionReturn<typeof functions.setImplementation>
 
 export type SupportsInterfaceParams = FunctionArguments<typeof functions.supportsInterface>
 export type SupportsInterfaceReturn = FunctionReturn<typeof functions.supportsInterface>
