@@ -6,6 +6,7 @@ import * as fundTokenAbi from './abi/fundToken'
 export const FACTORY_ADDRESS = '0xfF5D81646171Ef951E200797981792c5f49D0f28';
 
 export const processor = new EvmBatchProcessor()
+  .setGateway("https://v2.archive.subsquid.io/network/plume-testnet")
   .setRpcEndpoint({
       url: assertNotNull(process.env.RPC_ENDPOINT, 'No RPC endpoint supplied'),
       rateLimit: 10
