@@ -20,7 +20,7 @@ processor.run(new TypeormDatabase({supportHotBlocks: true}), async (ctx) => {
   }
   for (let block of ctx.blocks) {
     for (let log of block.logs) {
-      if (log.address === MINERAL_VAULT_FUND_TOKEN_ADDRESS) {
+      if (log.address.toLowerCase() === MINERAL_VAULT_FUND_TOKEN_ADDRESS.toLowerCase()) {
         if (log.topics[0] === fundTokenAbi.events.Transfer.topic) {
           // Transfers
           let {from, to, value} = fundTokenAbi.events.Transfer.decode(log);
