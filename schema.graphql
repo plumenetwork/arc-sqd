@@ -1,22 +1,28 @@
-type TokenCreation @entity {
+type Token @entity {
   id: ID!
+  address: String! @unique
   createdAt: DateTime!
-  owner: String! @index
-  tokenAddress: String!
+  tokenAdmins: [String!]!
 }
 
 type TokenHolder @entity {
   id: ID!
-  owner: String! @index
+  address: String! @index
   tokenAddress: String! @index
   value: BigInt!
 }
 
 type TokenDeposit @entity {
   id: ID!
-  depositedAt: DateTime!
+  transactionHash: String! @unique
   tokenAddress: String! @index
   depositor: String!
+  depositedAt: DateTime!
   amount: BigInt!
-  transactionHash: String!
+}
+
+type WhitelistedAddress @entity {
+  id: ID!
+  address: String! @index
+  tokenAddress: String! @index
 }

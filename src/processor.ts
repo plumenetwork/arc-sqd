@@ -16,6 +16,11 @@ export const processor = new EvmBatchProcessor()
       topic0: [
           fundTokenAbi.events.Transfer.topic,
           fundTokenAbi.events.Deposited.topic,
-          fundTokenAbi.events.YieldClaimed.topic
+          fundTokenAbi.events.YieldClaimed.topic,
+          fundTokenAbi.events.RoleGranted.topic,
+          fundTokenAbi.events.RoleRevoked.topic,
+          fundTokenAbi.events.Initialized.topic,
+          fundTokenAbi.events.AddressAddedToWhitelist.topic,
+          fundTokenAbi.events.AddressRemovedFromWhitelist.topic,
       ]
   })

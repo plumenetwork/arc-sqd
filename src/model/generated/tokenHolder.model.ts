@@ -11,7 +11,7 @@ export class TokenHolder {
 
     @Index_()
     @StringColumn_({nullable: false})
-    owner!: string
+    address!: string
 
     @Index_()
     @StringColumn_({nullable: false})
