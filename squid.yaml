@@ -13,7 +13,8 @@ deploy:
       - sqd
       - process:prod
     env:
-      RPC_ENDPOINT: https://test-rpc.plumenetwork.xyz
+      RPC_ENDPOINT: https://phoenix-rpc.plumenetwork.xyz
+      GATEWAY: https://v2.archive.subsquid.io/network/plume-mainnet
   api:
     cmd:
       - sqd
